@@ -67,7 +67,7 @@ public static class PointSampling
                     int pointIndex = grid[x, y] - 1;
                     if (pointIndex != -1)
                     {
-                        float sqrDst = (candidate - points[pointIndex]).SqrMagnitude();
+                        float sqrDst = (candidate - points[pointIndex]).sqrMagnitude;
                         if (sqrDst <= r * r)
                         {
                             return false;
