@@ -3,14 +3,15 @@ using TriangleNet.Topology;
 using UnityEngine;
 using Mesh = TriangleNet.Mesh;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class MapDisplay : MonoBehaviour
 {
     public Material material;
     public Gradient gradient;
-    
+
     private MeshFilter _meshFilter;
     private MeshRenderer _meshRenderer;
+    private MeshCollider _meshCollider;
     
     public Color[] GenerateColors(Mesh mesh, float[,] noiseMap)
     {
@@ -22,6 +23,11 @@ public class MapDisplay : MonoBehaviour
         if (_meshRenderer == null)
         {
             _meshRenderer = GetComponent<MeshRenderer>();
+        }
+
+        if (_meshCollider == null)
+        {
+            _meshCollider = GetComponent<MeshCollider>();
         }
         
         List<Color> colorMap = new List<Color>();
@@ -58,6 +64,13 @@ public class MapDisplay : MonoBehaviour
     {
         _meshFilter.mesh = mesh;
         _meshRenderer.material = material;
+
+        if (_meshCollider != null)
+        {
+            // Resetting sharedMesh ensures collider updates when a new mesh is assigned
+            _meshCollider.sharedMesh = null;
+            _meshCollider.sharedMesh = mesh;
+        }
     }
 
     public void ClearMesh()
@@ -65,6 +78,11 @@ public class MapDisplay : MonoBehaviour
         if (_meshFilter.sharedMesh != null)
         {
             _meshFilter.sharedMesh = null;
+        }
+
+        if (_meshCollider != null && _meshCollider.sharedMesh != null)
+        {
+            _meshCollider.sharedMesh = null;
         }
     }
 
