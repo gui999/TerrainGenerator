@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(WaterGenerator))]
@@ -8,16 +6,24 @@ public class WaterGeneratorEditor : Editor
 {
     public override void OnInspectorGUI() 
     {
-        WaterGenerator mapGen = (WaterGenerator)target;
+        serializedObject.Update();
 
-        if (DrawDefaultInspector()) 
+        if (DrawDefaultInspector())
         {
-            mapGen.GenerateWater();
+            foreach (WaterGenerator gen in targets)
+            {
+                gen.GenerateWater();
+            }
         }
 
-        if (GUILayout.Button ("Update")) 
+        serializedObject.ApplyModifiedProperties();
+
+        if (GUILayout.Button("Update"))
         {
-            mapGen.GenerateWater();
+            foreach (WaterGenerator gen in targets)
+            {
+                gen.GenerateWater();
+            }
         }
     }
 }
